@@ -1,0 +1,48 @@
+{
+  "name": "ikoma-mcp",
+  "version": "2.0.0",
+  "description": "Sovereign MCP server for AI-driven VPS application deployment",
+  "main": "dist/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "mcp": "node dist/index.js mcp",
+    "http": "node dist/index.js http",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "deployment",
+    "vps",
+    "docker"
+  ],
+  "author": "IKOMA Project",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "dotenv": "^16.3.1",
+    "zod": "^3.22.4",
+    "nanoid": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.6",
+    "@types/pg": "^8.10.9",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.0",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "vitest": "^1.1.1"
+  }
+}
