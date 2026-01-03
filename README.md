@@ -71,8 +71,8 @@ IKOMA MCP is a secure, audited MCP server that enables AI assistants to deploy a
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/ikoma-mcp.git
-cd ikoma-mcp
+git clone https://github.com/zumradeals/ikoma-mcpp.git
+cd ikoma-mcpp
 
 # Copy files to /opt/ikoma
 sudo mkdir -p /opt/ikoma
@@ -328,9 +328,8 @@ MIT License - see [LICENSE](LICENSE) file.
 
 ## 🆘 Support
 
-- GitHub Issues: https://github.com/your-org/ikoma-mcp/issues
-- Documentation: https://docs.ikoma-mcp.dev
-- Discord: https://discord.gg/ikoma-mcp
+- GitHub Issues: https://github.com/zumradeals/ikoma-mcpp/issues
+- Documentation: See project documentation files (README-runbook.md, DEMO-SESSION.md)
 
 ## 🙏 Acknowledgments
 
