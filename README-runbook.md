@@ -1,46 +1,46 @@
-# 📋 IKOMA MCP Deployment Runbook
+# 📋 Runbook de Déploiement IKOMA MCP
 
-**Document Version:** 1.0  
-**Last Updated:** 2026-01-02  
-**Author:** IKOMA Project Team
+**Version du Document :** 1.0  
+**Dernière Mise à Jour :** 2026-01-02  
+**Auteur :** Équipe Projet IKOMA
 
 ---
 
-## 🎯 Purpose
+## 🎯 Objectif
 
-This runbook provides step-by-step procedures for deploying, operating, and troubleshooting applications managed by IKOMA MCP v2.0.
+Ce runbook fournit des procédures étape par étape pour déployer, opérer et dépanner les applications gérées par IKOMA MCP v2.0.
 
-## 📋 Prerequisites Checklist
+## 📋 Liste de Vérification des Prérequis
 
-Before deployment, verify:
+Avant le déploiement, vérifiez :
 
-- [ ] IKOMA MCP is installed and running
-- [ ] API key is available and secured
-- [ ] Docker daemon is running
-- [ ] PostgreSQL is accessible
-- [ ] `/srv/apps` has sufficient disk space
-- [ ] Application source code is prepared
-- [ ] Environment variables are documented
+- [ ] IKOMA MCP est installé et en cours d'exécution
+- [ ] La clé API est disponible et sécurisée
+- [ ] Le démon Docker est en cours d'exécution
+- [ ] PostgreSQL est accessible
+- [ ] `/srv/apps` dispose d'un espace disque suffisant
+- [ ] Le code source de l'application est préparé
+- [ ] Les variables d'environnement sont documentées
 
-## 🚀 Standard Deployment Workflow
+## 🚀 Workflow de Déploiement Standard
 
-### Phase 1: Initialization
+### Phase 1 : Initialisation
 
-**Objective:** Create application structure
+**Objectif :** Créer la structure de l'application
 
 ```bash
-# 1. Initialize app directory
+# 1. Initialiser le répertoire de l'application
 curl -X POST http://localhost:3000/execute/apps.init \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: builder" \
   -H "Content-Type: application/json" \
   -d '{"appName":"myapp"}'
 
-# 2. Verify structure
+# 2. Vérifier la structure
 ls -la /srv/apps/myapp/
 ```
 
-**Expected Output:**
+**Sortie Attendue :**
 ```
 /srv/apps/myapp/
 ├── config/
@@ -49,42 +49,42 @@ ls -la /srv/apps/myapp/
 └── docker-compose.yml
 ```
 
-### Phase 2: Configuration
+### Phase 2 : Configuration
 
-**Objective:** Configure application environment
+**Objectif :** Configurer l'environnement de l'application
 
 ```bash
-# 1. Generate environment template
+# 1. Générer le modèle d'environnement
 curl -X POST http://localhost:3000/execute/apps.env.example \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{"appName":"myapp"}' | jq -r '.result'
 
-# 2. Create .env file
+# 2. Créer le fichier .env
 cat > /srv/apps/myapp/.env <<EOF
 PORT=3000
 NODE_ENV=production
 POSTGRES_DB=myapp
 POSTGRES_USER=ikoma
-POSTGRES_PASSWORD=secure_password_here
+POSTGRES_PASSWORD=mot_de_passe_securise_ici
 EOF
 
-# 3. Copy application files
-cp -r /path/to/source/* /srv/apps/myapp/src/
+# 3. Copier les fichiers de l'application
+cp -r /chemin/vers/source/* /srv/apps/myapp/src/
 ```
 
-### Phase 3: Database Setup
+### Phase 3 : Configuration de la Base de Données
 
-**Objective:** Provision and configure database
+**Objectif :** Provisionner et configurer la base de données
 
 ```bash
-# 1. Create database
+# 1. Créer la base de données
 curl -X POST http://localhost:3000/execute/db.create \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: builder" \
   -d '{"appName":"myapp"}'
 
-# 2. Run migrations
+# 2. Exécuter les migrations
 MIGRATION_SQL=$(cat /srv/apps/myapp/migrations/001_init.sql)
 curl -X POST http://localhost:3000/execute/db.migrate \
   -H "X-Api-Key: $API_KEY" \
@@ -92,68 +92,68 @@ curl -X POST http://localhost:3000/execute/db.migrate \
   -H "Content-Type: application/json" \
   -d "{\"appName\":\"myapp\",\"sql\":\"$MIGRATION_SQL\"}"
 
-# 3. Verify database
+# 3. Vérifier la base de données
 curl -X POST http://localhost:3000/execute/db.status \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{"appName":"myapp"}'
 ```
 
-### Phase 4: Deployment
+### Phase 4 : Déploiement
 
-**Objective:** Start application containers
+**Objectif :** Démarrer les conteneurs de l'application
 
 ```bash
-# 1. Validate configuration
+# 1. Valider la configuration
 curl -X POST http://localhost:3000/execute/apps.validate \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{"appName":"myapp"}'
 
-# 2. Deploy
+# 2. Déployer
 curl -X POST http://localhost:3000/execute/deploy.up \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: operator" \
   -d '{"appName":"myapp"}'
 
-# 3. Check status
+# 3. Vérifier le statut
 curl -X POST http://localhost:3000/execute/apps.status \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{"appName":"myapp"}'
 ```
 
-### Phase 5: Verification
+### Phase 5 : Vérification
 
-**Objective:** Confirm successful deployment
+**Objectif :** Confirmer le succès du déploiement
 
 ```bash
-# 1. Verify release
+# 1. Vérifier la release
 curl -X POST http://localhost:3000/execute/artifact.verify_release \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{"appName":"myapp"}' | jq
 
-# 2. Check health
+# 2. Vérifier la santé
 curl -X POST http://localhost:3000/execute/apps.health \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{"appName":"myapp"}'
 
-# 3. Test application endpoint
+# 3. Tester le endpoint de l'application
 curl http://localhost:3000/health
 ```
 
-**Success Criteria:**
-- ✅ `verified: true` in release verification
-- ✅ `health: "healthy"` in status check
-- ✅ Application responds to health check
+**Critères de Succès :**
+- ✅ `verified: true` dans la vérification de release
+- ✅ `health: "healthy"` dans la vérification de statut
+- ✅ L'application répond à la vérification de santé
 
 ---
 
-## 🔄 Operational Procedures
+## 🔄 Procédures Opérationnelles
 
-### Restart Application
+### Redémarrer l'Application
 
 ```bash
 curl -X POST http://localhost:3000/execute/deploy.restart \
@@ -162,7 +162,7 @@ curl -X POST http://localhost:3000/execute/deploy.restart \
   -d '{"appName":"myapp"}'
 ```
 
-### Stop Application
+### Arrêter l'Application
 
 ```bash
 curl -X POST http://localhost:3000/execute/deploy.down \
@@ -171,7 +171,7 @@ curl -X POST http://localhost:3000/execute/deploy.down \
   -d '{"appName":"myapp"}'
 ```
 
-### Create Database Backup
+### Créer une Sauvegarde de Base de Données
 
 ```bash
 curl -X POST http://localhost:3000/execute/db.backup \
@@ -181,7 +181,7 @@ curl -X POST http://localhost:3000/execute/db.backup \
   -d '{"appName":"myapp","backupName":"myapp-'$(date +%Y%m%d)'.sql"}'
 ```
 
-### View Application Logs
+### Consulter les Logs de l'Application
 
 ```bash
 docker compose -f /srv/apps/myapp/docker-compose.yml logs -f --tail=100
@@ -189,96 +189,96 @@ docker compose -f /srv/apps/myapp/docker-compose.yml logs -f --tail=100
 
 ---
 
-## 🆘 Troubleshooting Guide
+## 🆘 Guide de Dépannage
 
-### Issue: Containers won't start
+### Problème : Les conteneurs ne démarrent pas
 
-**Symptoms:** `dockerRunning: false` in status
+**Symptômes :** `dockerRunning: false` dans le statut
 
-**Diagnosis:**
+**Diagnostic :**
 ```bash
-# Check Docker logs
+# Vérifier les logs Docker
 docker compose -f /srv/apps/myapp/docker-compose.yml logs
 
-# Check docker-compose.yml syntax
+# Vérifier la syntaxe du docker-compose.yml
 docker compose -f /srv/apps/myapp/docker-compose.yml config
 ```
 
-**Solutions:**
-1. Verify environment variables in `.env`
-2. Check port conflicts: `netstat -tulpn | grep <PORT>`
-3. Restart Docker: `systemctl restart docker`
+**Solutions :**
+1. Vérifier les variables d'environnement dans `.env`
+2. Vérifier les conflits de ports : `netstat -tulpn | grep <PORT>`
+3. Redémarrer Docker : `systemctl restart docker`
 
-### Issue: Database connection fails
+### Problème : La connexion à la base de données échoue
 
-**Symptoms:** Application logs show database errors
+**Symptômes :** Les logs de l'application montrent des erreurs de base de données
 
-**Diagnosis:**
+**Diagnostic :**
 ```bash
-# Check database exists
+# Vérifier que la base de données existe
 curl -X POST http://localhost:3000/execute/db.status \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{"appName":"myapp"}'
 
-# Test PostgreSQL connectivity
+# Tester la connectivité PostgreSQL
 docker compose -f /opt/ikoma/docker-compose.yml exec postgres \
   psql -U ikoma -d myapp -c "SELECT 1"
 ```
 
-**Solutions:**
-1. Verify `POSTGRES_*` environment variables match
-2. Check PostgreSQL logs: `docker logs ikoma-postgres`
-3. Recreate database if corrupted
+**Solutions :**
+1. Vérifier que les variables d'environnement `POSTGRES_*` correspondent
+2. Vérifier les logs PostgreSQL : `docker logs ikoma-postgres`
+3. Recréer la base de données si corrompue
 
-### Issue: Disk space full
+### Problème : Espace disque plein
 
-**Symptoms:** Deployment fails with disk errors
+**Symptômes :** Le déploiement échoue avec des erreurs de disque
 
-**Diagnosis:**
+**Diagnostic :**
 ```bash
 df -h /srv/apps
 du -sh /srv/apps/*
 ```
 
-**Solutions:**
-1. Remove old backups: `rm /var/backups/ikoma/*.sql`
-2. Clean Docker: `docker system prune -a`
-3. Remove unused apps with `apps.remove`
+**Solutions :**
+1. Supprimer les anciennes sauvegardes : `rm /var/backups/ikoma/*.sql`
+2. Nettoyer Docker : `docker system prune -a`
+3. Supprimer les applications inutilisées avec `apps.remove`
 
 ---
 
-## 🔙 Rollback Procedure
+## 🔙 Procédure de Rollback
 
-### Emergency Rollback
+### Rollback d'Urgence
 
-**Time to rollback:** ~5 minutes
+**Temps de rollback :** ~5 minutes
 
-**Steps:**
+**Étapes :**
 
 ```bash
-# 1. Stop current version
+# 1. Arrêter la version actuelle
 curl -X POST http://localhost:3000/execute/deploy.down \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: operator" \
   -d '{"appName":"myapp"}'
 
-# 2. Restore database backup
+# 2. Restaurer la sauvegarde de base de données
 BACKUP_FILE="/var/backups/ikoma/myapp-20260101.sql"
 docker compose -f /opt/ikoma/docker-compose.yml exec -T postgres \
   psql -U ikoma -d myapp < $BACKUP_FILE
 
-# 3. Revert application code
+# 3. Revenir au code de l'application précédent
 cd /srv/apps/myapp/src
-git checkout previous-release-tag
+git checkout tag-release-precedent
 
-# 4. Deploy previous version
+# 4. Déployer la version précédente
 curl -X POST http://localhost:3000/execute/deploy.up \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: operator" \
   -d '{"appName":"myapp"}'
 
-# 5. Verify rollback
+# 5. Vérifier le rollback
 curl -X POST http://localhost:3000/execute/artifact.verify_release \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
@@ -287,9 +287,9 @@ curl -X POST http://localhost:3000/execute/artifact.verify_release \
 
 ---
 
-## 📊 Health Checks
+## 📊 Vérifications de Santé
 
-### Platform Health
+### Santé de la Plateforme
 
 ```bash
 curl -X POST http://localhost:3000/execute/platform.check \
@@ -298,7 +298,7 @@ curl -X POST http://localhost:3000/execute/platform.check \
   -d '{}'
 ```
 
-Expected healthy output:
+Sortie attendue en bonne santé :
 ```json
 {
   "healthy": true,
@@ -310,7 +310,7 @@ Expected healthy output:
 }
 ```
 
-### Application Health
+### Santé de l'Application
 
 ```bash
 curl -X POST http://localhost:3000/execute/apps.health \
@@ -321,70 +321,70 @@ curl -X POST http://localhost:3000/execute/apps.health \
 
 ---
 
-## 🔐 Security Procedures
+## 🔐 Procédures de Sécurité
 
-### Rotate API Key
+### Rotation de la Clé API
 
 ```bash
-# 1. Generate new key
+# 1. Générer une nouvelle clé
 NEW_KEY=$(openssl rand -base64 32)
 NEW_HASH=$(echo -n "$NEW_KEY" | sha256sum | cut -d' ' -f1)
 
-# 2. Update configuration
+# 2. Mettre à jour la configuration
 echo "API_KEY_HASH=$NEW_HASH" >> /opt/ikoma/.env
 
-# 3. Restart IKOMA
+# 3. Redémarrer IKOMA
 docker compose -f /opt/ikoma/docker-compose.yml restart
 
-# 4. Save new key securely
+# 4. Sauvegarder la nouvelle clé en sécurité
 echo "$NEW_KEY" > /opt/ikoma/api-key.txt
 chmod 600 /opt/ikoma/api-key.txt
 ```
 
-### Review Audit Log
+### Examiner le Journal d'Audit
 
 ```bash
-# View recent activity
+# Voir l'activité récente
 tail -n 100 /var/log/ikoma/audit.jsonl | jq
 
-# Search for specific app
+# Rechercher une application spécifique
 grep '"appName":"myapp"' /var/log/ikoma/audit.jsonl | jq
 
-# Find failed operations
+# Trouver les opérations échouées
 jq 'select(.result == "error")' /var/log/ikoma/audit.jsonl
 ```
 
 ---
 
-## 📞 Escalation Path
+## 📞 Chemin d'Escalade
 
-| Severity | Response Time | Contact |
-|----------|---------------|---------|
-| P1 - Critical (production down) | 15 minutes | DevOps on-call |
-| P2 - High (degraded service) | 1 hour | Platform team |
-| P3 - Medium (minor issue) | 4 hours | Support team |
-| P4 - Low (question) | 24 hours | Documentation |
-
----
-
-## 📝 Post-Deployment Checklist
-
-After each deployment, verify:
-
-- [ ] Release verification passes
-- [ ] Application health check passes
-- [ ] Database migrations completed
-- [ ] Backup created
-- [ ] Monitoring alerts configured
-- [ ] Runbook updated (if procedures changed)
-- [ ] Team notified
+| Sévérité | Temps de Réponse | Contact |
+|----------|------------------|---------|
+| P1 - Critique (production arrêtée) | 15 minutes | DevOps d'astreinte |
+| P2 - Élevée (service dégradé) | 1 heure | Équipe plateforme |
+| P3 - Moyenne (problème mineur) | 4 heures | Équipe support |
+| P4 - Faible (question) | 24 heures | Documentation |
 
 ---
 
-**Document Maintenance:**
-- Review quarterly
-- Update after major deployments
-- Incorporate lessons learned from incidents
+## 📝 Liste de Vérification Post-Déploiement
 
-**Last Review:** 2026-01-02  
-**Next Review:** 2026-04-02
+Après chaque déploiement, vérifiez :
+
+- [ ] La vérification de release passe
+- [ ] La vérification de santé de l'application passe
+- [ ] Les migrations de base de données sont terminées
+- [ ] La sauvegarde est créée
+- [ ] Les alertes de surveillance sont configurées
+- [ ] Le runbook est mis à jour (si les procédures ont changé)
+- [ ] L'équipe est notifiée
+
+---
+
+**Maintenance du Document :**
+- Révision trimestrielle
+- Mise à jour après les déploiements majeurs
+- Incorporation des leçons apprises des incidents
+
+**Dernière Révision :** 2026-01-02  
+**Prochaine Révision :** 2026-04-02

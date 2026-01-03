@@ -1,33 +1,33 @@
-# 🎬 IKOMA MCP v2.0 — Interactive Demo Session
+# 🎬 IKOMA MCP v2.0 — Session de Démonstration Interactive
 
-**Duration:** 15 minutes  
-**Skill Level:** Beginner  
-**Prerequisites:** IKOMA MCP installed
-
----
-
-## 🎯 Demo Objectives
-
-By the end of this demo, you will:
-1. ✅ Understand IKOMA MCP capabilities
-2. ✅ Deploy a sample application end-to-end
-3. ✅ Verify deployment integrity
-4. ✅ Experience the audit trail
+**Durée :** 15 minutes  
+**Niveau :** Débutant  
+**Prérequis :** IKOMA MCP installé
 
 ---
 
-## 🚀 Setup
+## 🎯 Objectifs de la Démonstration
+
+À la fin de cette démonstration, vous aurez :
+1. ✅ Compris les capacités d'IKOMA MCP
+2. ✅ Déployé une application exemple de bout en bout
+3. ✅ Vérifié l'intégrité du déploiement
+4. ✅ Expérimenté la piste d'audit
+
+---
+
+## 🚀 Configuration
 
 ```bash
-# Get your API key
+# Obtenir votre clé API
 export API_KEY=$(cat /opt/ikoma/api-key.txt)
 export BASE_URL="http://localhost:3000"
 
-# Verify IKOMA is running
+# Vérifier qu'IKOMA fonctionne
 curl -s $BASE_URL/health | jq
 ```
 
-**Expected output:**
+**Sortie attendue :**
 ```json
 {
   "status": "healthy",
@@ -37,38 +37,38 @@ curl -s $BASE_URL/health | jq
 
 ---
 
-## 📚 Step 1: Discover Platform
+## 📚 Étape 1 : Découvrir la Plateforme
 
-**Goal:** Learn what IKOMA can do
+**Objectif :** Apprendre ce qu'IKOMA peut faire
 
 ```bash
-# Get platform information
+# Obtenir les informations de la plateforme
 curl -s -X POST $BASE_URL/execute/platform.info \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{}' | jq
 ```
 
-**Output explanation:**
-- `version`: IKOMA version
-- `uptime`: Server uptime in seconds
-- `capabilities`: All **19** available tools
-- `limits`: Platform constraints
+**Explication de la sortie :**
+- `version` : Version d'IKOMA
+- `uptime` : Temps de fonctionnement du serveur en secondes
+- `capabilities` : Tous les **19** outils disponibles
+- `limits` : Contraintes de la plateforme
 
-**Try it:** Count the capabilities:
+**Essayez :** Comptez les capacités :
 ```bash
 curl -s -X POST $BASE_URL/execute/platform.info \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -d '{}' | jq '.result.capabilities | length'
-# Expected output: 19
+# Sortie attendue : 19
 ```
 
 ---
 
-## 🏥 Step 2: Check Platform Health
+## 🏥 Étape 2 : Vérifier la Santé de la Plateforme
 
-**Goal:** Verify all systems operational
+**Objectif :** Vérifier que tous les systèmes sont opérationnels
 
 ```bash
 curl -s -X POST $BASE_URL/execute/platform.check \
@@ -77,19 +77,19 @@ curl -s -X POST $BASE_URL/execute/platform.check \
   -d '{}' | jq
 ```
 
-**What to look for:**
-- `healthy: true` — All systems go
-- `docker: true` — Container engine ready
-- `postgres: true` — Database ready
-- `appsRoot: true` — Storage accessible
+**Ce qu'il faut rechercher :**
+- `healthy: true` — Tous les systèmes sont opérationnels
+- `docker: true` — Moteur de conteneurs prêt
+- `postgres: true` — Base de données prête
+- `appsRoot: true` — Stockage accessible
 
-**Troubleshooting:** If any check is `false`, see the runbook.
+**Dépannage :** Si une vérification est `false`, consultez le runbook.
 
 ---
 
-## 📦 Step 3: Initialize Demo App
+## 📦 Étape 3 : Initialiser l'Application de Démonstration
 
-**Goal:** Create application structure
+**Objectif :** Créer la structure de l'application
 
 ```bash
 curl -s -X POST $BASE_URL/execute/apps.init \
@@ -99,24 +99,24 @@ curl -s -X POST $BASE_URL/execute/apps.init \
   -d '{"appName":"demoapp"}' | jq
 ```
 
-**Behind the scenes:**
-- Creates `/srv/apps/demoapp/`
-- Generates `docker-compose.yml`
-- Creates `config/`, `migrations/`, `seeds/` directories
+**En coulisses :**
+- Crée `/srv/apps/demoapp/`
+- Génère `docker-compose.yml`
+- Crée les répertoires `config/`, `migrations/`, `seeds/`
 
-**Verify:**
+**Vérifier :**
 ```bash
 ls -la /srv/apps/demoapp/
 ```
 
 ---
 
-## 📝 Step 4: Configure Application
+## 📝 Étape 4 : Configurer l'Application
 
-**Goal:** Prepare application environment
+**Objectif :** Préparer l'environnement de l'application
 
 ```bash
-# Generate environment template
+# Générer un modèle d'environnement
 curl -s -X POST $BASE_URL/execute/apps.env.example \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
@@ -124,7 +124,7 @@ curl -s -X POST $BASE_URL/execute/apps.env.example \
   -d '{"appName":"demoapp"}' | jq -r '.result'
 ```
 
-**Customize the configuration:**
+**Personnaliser la configuration :**
 ```bash
 cat > /srv/apps/demoapp/.env <<EOF
 PORT=3001
@@ -135,7 +135,7 @@ POSTGRES_PASSWORD=demo_password_123
 EOF
 ```
 
-**Create sample app code:**
+**Créer le code de l'application exemple :**
 ```bash
 mkdir -p /srv/apps/demoapp/src
 cat > /srv/apps/demoapp/src/package.json <<EOF
@@ -160,16 +160,16 @@ app.get('/health', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Demo app listening on port 3000');
+  console.log('Application de démo en écoute sur le port 3000');
 });
 EOF
 ```
 
 ---
 
-## 🗄️ Step 5: Create Database
+## 🗄️ Étape 5 : Créer la Base de Données
 
-**Goal:** Provision PostgreSQL database
+**Objectif :** Provisionner la base de données PostgreSQL
 
 ```bash
 curl -s -X POST $BASE_URL/execute/db.create \
@@ -179,7 +179,7 @@ curl -s -X POST $BASE_URL/execute/db.create \
   -d '{"appName":"demoapp"}' | jq
 ```
 
-**Check database status:**
+**Vérifier le statut de la base de données :**
 ```bash
 curl -s -X POST $BASE_URL/execute/db.status \
   -H "X-Api-Key: $API_KEY" \
@@ -188,7 +188,7 @@ curl -s -X POST $BASE_URL/execute/db.status \
   -d '{"appName":"demoapp"}' | jq
 ```
 
-**Expected:**
+**Attendu :**
 ```json
 {
   "exists": true,
@@ -200,19 +200,19 @@ curl -s -X POST $BASE_URL/execute/db.status \
 
 ---
 
-## 🚀 Step 6: Deploy Application
+## 🚀 Étape 6 : Déployer l'Application
 
-**Goal:** Start containers
+**Objectif :** Démarrer les conteneurs
 
 ```bash
-# Validate first
+# Valider d'abord
 curl -s -X POST $BASE_URL/execute/apps.validate \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
   -H "Content-Type: application/json" \
   -d '{"appName":"demoapp"}' | jq
 
-# Deploy!
+# Déployer !
 curl -s -X POST $BASE_URL/execute/deploy.up \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: operator" \
@@ -220,16 +220,16 @@ curl -s -X POST $BASE_URL/execute/deploy.up \
   -d '{"appName":"demoapp"}' | jq
 ```
 
-**Wait a few seconds for containers to start...**
+**Attendez quelques secondes que les conteneurs démarrent...**
 
 ---
 
-## ✅ Step 7: Verify Deployment
+## ✅ Étape 7 : Vérifier le Déploiement
 
-**Goal:** Confirm everything works
+**Objectif :** Confirmer que tout fonctionne
 
 ```bash
-# Check application status
+# Vérifier le statut de l'application
 curl -s -X POST $BASE_URL/execute/apps.status \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: observer" \
@@ -237,7 +237,7 @@ curl -s -X POST $BASE_URL/execute/apps.status \
   -d '{"appName":"demoapp"}' | jq
 ```
 
-**Expected:**
+**Attendu :**
 ```json
 {
   "name": "demoapp",
@@ -248,7 +248,7 @@ curl -s -X POST $BASE_URL/execute/apps.status \
 }
 ```
 
-**Run full verification:**
+**Exécuter une vérification complète :**
 ```bash
 curl -s -X POST $BASE_URL/execute/artifact.verify_release \
   -H "X-Api-Key: $API_KEY" \
@@ -257,13 +257,13 @@ curl -s -X POST $BASE_URL/execute/artifact.verify_release \
   -d '{"appName":"demoapp"}' | jq
 ```
 
-**🎉 Success criteria:** `verified: true` and all checks pass!
+**🎉 Critère de succès :** `verified: true` et toutes les vérifications passent !
 
 ---
 
-## 📊 Step 8: Generate Runbook
+## 📊 Étape 8 : Générer le Runbook
 
-**Goal:** Document the deployment
+**Objectif :** Documenter le déploiement
 
 ```bash
 curl -s -X POST $BASE_URL/execute/artifact.generate_runbook \
@@ -273,19 +273,19 @@ curl -s -X POST $BASE_URL/execute/artifact.generate_runbook \
   -d '{"appName":"demoapp"}' | jq
 ```
 
-**Output includes:**
-- Deployment timestamp
-- Configuration snapshot
-- Health check commands
-- Rollback procedure
+**La sortie inclut :**
+- Horodatage du déploiement
+- Instantané de la configuration
+- Commandes de vérification de santé
+- Procédure de rollback
 
-**Save for future reference!**
+**Sauvegardez pour référence future !**
 
 ---
 
-## 💾 Step 9: Create Backup
+## 💾 Étape 9 : Créer une Sauvegarde
 
-**Goal:** Protect your data
+**Objectif :** Protéger vos données
 
 ```bash
 curl -s -X POST $BASE_URL/execute/db.backup \
@@ -295,26 +295,26 @@ curl -s -X POST $BASE_URL/execute/db.backup \
   -d "{\"appName\":\"demoapp\",\"backupName\":\"demoapp-$(date +%Y%m%d).sql\"}" | jq
 ```
 
-**Verify backup:**
+**Vérifier la sauvegarde :**
 ```bash
 ls -lh /var/backups/ikoma/
 ```
 
 ---
 
-## 🔄 Step 10: Test Operations
+## 🔄 Étape 10 : Tester les Opérations
 
-**Goal:** Experience operational commands
+**Objectif :** Expérimenter les commandes opérationnelles
 
 ```bash
-# Restart application
+# Redémarrer l'application
 curl -s -X POST $BASE_URL/execute/deploy.restart \
   -H "X-Api-Key: $API_KEY" \
   -H "X-Role: operator" \
   -H "Content-Type: application/json" \
   -d '{"appName":"demoapp"}' | jq
 
-# Check health after restart
+# Vérifier la santé après le redémarrage
 sleep 5
 curl -s -X POST $BASE_URL/execute/apps.health \
   -H "X-Api-Key: $API_KEY" \
@@ -325,32 +325,32 @@ curl -s -X POST $BASE_URL/execute/apps.health \
 
 ---
 
-## 📜 Step 11: Review Audit Trail
+## 📜 Étape 11 : Examiner la Piste d'Audit
 
-**Goal:** Understand what happened
+**Objectif :** Comprendre ce qui s'est passé
 
 ```bash
-# View audit log
+# Voir le journal d'audit
 tail -n 20 /var/log/ikoma/audit.jsonl | jq
 
-# Find all operations on demoapp
+# Trouver toutes les opérations sur demoapp
 grep 'demoapp' /var/log/ikoma/audit.jsonl | jq
 
-# Count successful operations
+# Compter les opérations réussies
 grep 'success' /var/log/ikoma/audit.jsonl | wc -l
 ```
 
-**Notice:**
-- Every capability call logged
-- Timestamps in ISO 8601
-- Secret redaction (passwords show as `***REDACTED***`)
-- Duration tracking
+**Remarquez :**
+- Chaque appel de capacité est journalisé
+- Horodatages en ISO 8601
+- Rédaction des secrets (les mots de passe apparaissent comme `***REDACTED***`)
+- Suivi de la durée
 
 ---
 
-## 🧹 Step 12: Cleanup (Optional)
+## 🧹 Étape 12 : Nettoyage (Optionnel)
 
-**Goal:** Remove demo app
+**Objectif :** Supprimer l'application de démonstration
 
 ```bash
 curl -s -X POST $BASE_URL/execute/apps.remove \
@@ -360,35 +360,35 @@ curl -s -X POST $BASE_URL/execute/apps.remove \
   -d '{"appName":"demoapp"}' | jq
 ```
 
-**This will:**
-- Stop containers
-- Remove database
-- Delete application directory
+**Cela va :**
+- Arrêter les conteneurs
+- Supprimer la base de données
+- Supprimer le répertoire de l'application
 
 ---
 
-## 🎓 Learning Outcomes
+## 🎓 Résultats d'Apprentissage
 
-You've now:
+Vous avez maintenant :
 
-✅ **Discovered** IKOMA's 19 tools  
-✅ **Initialized** an application structure  
-✅ **Deployed** containers and database  
-✅ **Verified** deployment integrity  
-✅ **Generated** operational documentation  
-✅ **Created** database backups  
-✅ **Reviewed** the audit trail  
+✅ **Découvert** les 19 outils d'IKOMA  
+✅ **Initialisé** une structure d'application  
+✅ **Déployé** des conteneurs et une base de données  
+✅ **Vérifié** l'intégrité du déploiement  
+✅ **Généré** la documentation opérationnelle  
+✅ **Créé** des sauvegardes de base de données  
+✅ **Examiné** la piste d'audit  
 
 ---
 
-## 🚀 Next Steps
+## 🚀 Prochaines Étapes
 
-### Try MCP Native Mode
+### Essayer le Mode MCP Natif
 
-Instead of HTTP, use the stdio MCP transport:
+Au lieu de HTTP, utilisez le transport stdio MCP :
 
 ```bash
-# Configure in your MCP client (Claude Desktop, etc.)
+# Configurer dans votre client MCP (Claude Desktop, etc.)
 {
   "mcpServers": {
     "ikoma": {
@@ -401,60 +401,60 @@ Instead of HTTP, use the stdio MCP transport:
 }
 ```
 
-Then interact naturally:
-> "Deploy my Node.js app called 'backend' using the provided docker-compose.yml"
+Ensuite, interagissez naturellement :
+> "Déploie mon application Node.js appelée 'backend' en utilisant le docker-compose.yml fourni"
 
-IKOMA will handle the entire workflow!
+IKOMA gérera l'ensemble du workflow !
 
-### Explore Role-Based Access
+### Explorer le Contrôle d'Accès Basé sur les Rôles
 
-Try different roles:
+Essayez différents rôles :
 
 ```bash
-# Observer - read-only
+# Observateur - lecture seule
 curl ... -H "X-Role: observer"
 
-# Operator - deployments + backups
+# Opérateur - déploiements + sauvegardes
 curl ... -H "X-Role: operator"
 
-# Builder - + init apps + DB ops
+# Constructeur - + init apps + opérations DB
 curl ... -H "X-Role: builder"
 
-# Admin - + remove apps
+# Administrateur - + suppression d'apps
 curl ... -H "X-Role: admin"
 ```
 
-### Build Complex Workflows
+### Construire des Workflows Complexes
 
-Chain capabilities:
-1. `apps.init` → Initialize
-2. `db.create` → Provision database
-3. `db.migrate` → Schema setup
-4. `db.seed` → Test data
-5. `deploy.up` → Launch
-6. `artifact.verify_release` → Confirm
-7. `db.backup` → Protect
+Enchaîner les capacités :
+1. `apps.init` → Initialiser
+2. `db.create` → Provisionner la base de données
+3. `db.migrate` → Configuration du schéma
+4. `db.seed` → Données de test
+5. `deploy.up` → Lancement
+6. `artifact.verify_release` → Confirmation
+7. `db.backup` → Protection
 
 ---
 
-## 💡 Tips & Tricks
+## 💡 Astuces et Conseils
 
-**Pipe through jq for readability:**
+**Passer par jq pour la lisibilité :**
 ```bash
 curl ... | jq '.result'
 ```
 
-**Save API key in shell:**
+**Sauvegarder la clé API dans le shell :**
 ```bash
 echo "export API_KEY=$(cat /opt/ikoma/api-key.txt)" >> ~/.bashrc
 ```
 
-**Monitor logs live:**
+**Surveiller les logs en direct :**
 ```bash
 tail -f /var/log/ikoma/audit.jsonl | jq -C
 ```
 
-**List all apps:**
+**Lister toutes les applications :**
 ```bash
 curl -s -X POST $BASE_URL/execute/apps.list \
   -H "X-Api-Key: $API_KEY" \
@@ -464,32 +464,31 @@ curl -s -X POST $BASE_URL/execute/apps.list \
 
 ---
 
-## 🆘 Troubleshooting
+## 🆘 Dépannage
 
 **"API key required"**
-→ Check `X-Api-Key` header
+→ Vérifiez l'en-tête `X-Api-Key`
 
 **"Insufficient permissions"**
-→ Your role doesn't allow this capability. Use higher role or different capability.
+→ Votre rôle ne permet pas cette capacité. Utilisez un rôle supérieur ou une capacité différente.
 
 **"Database already exists"**
-→ Normal if re-running demo. Use `db.status` to check.
+→ Normal si vous relancez la démo. Utilisez `db.status` pour vérifier.
 
-**Docker errors**
-→ Check Docker daemon: `systemctl status docker`
-
----
-
-## 📚 Further Reading
-
-- [README.md](README.md) - Full documentation
-- [README-runbook.md](README-runbook.md) - Production runbook
-- [Model Context Protocol Spec](https://modelcontextprotocol.io)
+**Erreurs Docker**
+→ Vérifiez le démon Docker : `systemctl status docker`
 
 ---
 
-**Questions? Issues?**
-- GitHub: https://github.com/your-org/ikoma-mcp/issues
-- Discord: https://discord.gg/ikoma-mcp
+## 📚 Lectures Complémentaires
 
-**Happy deploying! 🚀**
+- [README.md](README.md) - Documentation complète
+- [README-runbook.md](README-runbook.md) - Runbook de production
+- [Spécification Model Context Protocol](https://modelcontextprotocol.io)
+
+---
+
+**Questions ? Problèmes ?**
+- GitHub : https://github.com/zumradeals/ikoma-mcpp/issues
+
+**Bon déploiement ! 🚀**

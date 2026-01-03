@@ -1,175 +1,175 @@
-# Contributing to IKOMA MCP
+# Contribuer à IKOMA MCP
 
-Thank you for your interest in contributing to IKOMA MCP! This document provides guidelines for contributing to the project.
+Merci de votre intérêt pour contribuer à IKOMA MCP ! Ce document fournit des lignes directrices pour contribuer au projet.
 
-## 🤝 How to Contribute
+## 🤝 Comment Contribuer
 
-### Reporting Issues
+### Signaler des Problèmes
 
-If you find a bug or have a feature request:
+Si vous trouvez un bug ou avez une demande de fonctionnalité :
 
-1. Check if the issue already exists in [GitHub Issues](https://github.com/zumradeals/ikoma-mcpp/issues)
-2. If not, create a new issue with:
-   - Clear title and description
-   - Steps to reproduce (for bugs)
-   - Expected vs actual behavior
-   - Your environment (OS, Node.js version, Docker version)
+1. Vérifiez si le problème existe déjà dans [GitHub Issues](https://github.com/zumradeals/ikoma-mcpp/issues)
+2. Si non, créez une nouvelle issue avec :
+   - Un titre et une description clairs
+   - Les étapes pour reproduire (pour les bugs)
+   - Le comportement attendu vs le comportement réel
+   - Votre environnement (OS, version Node.js, version Docker)
 
-### Submitting Changes
+### Soumettre des Changements
 
-1. **Fork the repository**
+1. **Forker le dépôt**
    ```bash
    git clone https://github.com/zumradeals/ikoma-mcpp.git
    cd ikoma-mcpp
    ```
 
-2. **Create a feature branch**
+2. **Créer une branche de fonctionnalité**
    ```bash
-   git checkout -b feature/your-feature-name
-   # or
-   git checkout -b fix/your-bug-fix
+   git checkout -b feature/nom-de-votre-fonctionnalite
+   # ou
+   git checkout -b fix/votre-correction-de-bug
    ```
 
-3. **Make your changes**
-   - Follow the existing code style
-   - Add tests for new features
-   - Update documentation as needed
+3. **Faire vos modifications**
+   - Suivez le style de code existant
+   - Ajoutez des tests pour les nouvelles fonctionnalités
+   - Mettez à jour la documentation si nécessaire
 
-4. **Test your changes**
+4. **Tester vos modifications**
    ```bash
-   # Install dependencies
+   # Installer les dépendances
    npm ci
    
-   # Run TypeScript compilation
+   # Exécuter la compilation TypeScript
    npm run build
    
-   # Run tests (if available)
+   # Exécuter les tests (si disponibles)
    npm test
    
-   # Test Docker build
+   # Tester le build Docker
    docker-compose build
    ```
 
-5. **Commit your changes**
+5. **Commiter vos modifications**
    ```bash
    git add .
-   git commit -m "feat: Add new capability for X"
-   # or
-   git commit -m "fix: Resolve issue with Y"
+   git commit -m "feat: Ajouter une nouvelle capacité pour X"
+   # ou
+   git commit -m "fix: Résoudre le problème avec Y"
    ```
 
-   Use conventional commit messages:
-   - `feat:` for new features
-   - `fix:` for bug fixes
-   - `docs:` for documentation changes
-   - `refactor:` for code refactoring
-   - `test:` for adding tests
-   - `chore:` for maintenance tasks
+   Utilisez des messages de commit conventionnels :
+   - `feat:` pour les nouvelles fonctionnalités
+   - `fix:` pour les corrections de bugs
+   - `docs:` pour les changements de documentation
+   - `refactor:` pour le refactoring de code
+   - `test:` pour l'ajout de tests
+   - `chore:` pour les tâches de maintenance
 
-6. **Push to your fork**
+6. **Pousser vers votre fork**
    ```bash
-   git push origin feature/your-feature-name
+   git push origin feature/nom-de-votre-fonctionnalite
    ```
 
-7. **Create a Pull Request**
-   - Go to the original repository
-   - Click "New Pull Request"
-   - Select your branch
-   - Provide a clear description of your changes
+7. **Créer une Pull Request**
+   - Allez sur le dépôt original
+   - Cliquez sur "New Pull Request"
+   - Sélectionnez votre branche
+   - Fournissez une description claire de vos modifications
 
-## 📋 Development Guidelines
+## 📋 Lignes Directrices de Développement
 
-### Code Style
+### Style de Code
 
-- Use TypeScript for all source code
-- Follow existing naming conventions
-- Use meaningful variable and function names
-- Add JSDoc comments for public APIs
-- Keep functions small and focused
+- Utilisez TypeScript pour tout le code source
+- Suivez les conventions de nommage existantes
+- Utilisez des noms de variables et de fonctions significatifs
+- Ajoutez des commentaires JSDoc pour les APIs publiques
+- Gardez les fonctions petites et focalisées
 
-### Project Structure
+### Structure du Projet
 
 ```
 ikoma-mcpp/
 ├── src/
-│   ├── core/           # Core capabilities and logic
-│   ├── http/           # HTTP server implementation
-│   └── mcp/            # MCP protocol implementation
-├── scripts/            # Installation and utility scripts
-├── docker-compose.yml  # Docker orchestration
-└── Dockerfile          # Container definition
+│   ├── core/           # Capacités et logique centrale
+│   ├── http/           # Implémentation du serveur HTTP
+│   └── mcp/            # Implémentation du protocole MCP
+├── scripts/            # Scripts d'installation et utilitaires
+├── docker-compose.yml  # Orchestration Docker
+└── Dockerfile          # Définition du conteneur
 ```
 
-### Adding New Capabilities
+### Ajouter de Nouvelles Capacités
 
-When adding a new capability:
+Lors de l'ajout d'une nouvelle capacité :
 
-1. Define it in `src/core/capabilities.ts`
-2. Follow the existing capability structure
-3. Specify required role level
-4. Add input validation schema
-5. Implement the capability function
-6. Update the tool count in README.md
-7. Add tests
+1. Définissez-la dans `src/core/capabilities.ts`
+2. Suivez la structure de capacité existante
+3. Spécifiez le niveau de rôle requis
+4. Ajoutez un schéma de validation d'entrée
+5. Implémentez la fonction de capacité
+6. Mettez à jour le nombre d'outils dans README.md
+7. Ajoutez des tests
 
-Example:
+Exemple :
 
 ```typescript
 {
-  name: 'your.capability',
-  description: 'Clear description of what it does',
+  name: 'votre.capacite',
+  description: 'Description claire de ce qu\'elle fait',
   requiredRole: 'operator',
   schema: z.object({
-    param: z.string().describe('Parameter description')
+    param: z.string().describe('Description du paramètre')
   }),
   handler: async (args, context) => {
-    // Implementation
+    // Implémentation
     return { success: true, data: result };
   }
 }
 ```
 
-### Security Considerations
+### Considérations de Sécurité
 
-- Never expose shell access
-- Always validate and sanitize inputs
-- Use path confinement for file operations
-- Redact secrets in logs
-- Follow principle of least privilege
+- Ne jamais exposer l'accès shell
+- Toujours valider et assainir les entrées
+- Utiliser le confinement de chemin pour les opérations de fichiers
+- Rédiger les secrets dans les logs
+- Suivre le principe du moindre privilège
 
-## 🧪 Testing
+## 🧪 Tests
 
-- Write tests for new features
-- Ensure all tests pass before submitting PR
-- Test Docker build locally
-- Verify security constraints are maintained
+- Écrivez des tests pour les nouvelles fonctionnalités
+- Assurez-vous que tous les tests passent avant de soumettre une PR
+- Testez le build Docker localement
+- Vérifiez que les contraintes de sécurité sont maintenues
 
 ## 📝 Documentation
 
-- Update README.md for user-facing changes
-- Update inline code comments
-- Add examples for new features
-- Update capability count if adding/removing tools
+- Mettez à jour README.md pour les changements visibles par l'utilisateur
+- Mettez à jour les commentaires de code en ligne
+- Ajoutez des exemples pour les nouvelles fonctionnalités
+- Mettez à jour le nombre de capacités si vous ajoutez/supprimez des outils
 
-## 🔍 Code Review Process
+## 🔍 Processus de Revue de Code
 
-1. Maintainers will review your PR
-2. Address any feedback or requested changes
-3. Once approved, your PR will be merged
-4. Your contribution will be credited in release notes
+1. Les mainteneurs examineront votre PR
+2. Répondez aux commentaires ou aux changements demandés
+3. Une fois approuvée, votre PR sera fusionnée
+4. Votre contribution sera créditée dans les notes de version
 
-## 💡 Questions?
+## 💡 Questions ?
 
-If you have questions about contributing:
+Si vous avez des questions sur la contribution :
 
-- Open a discussion in GitHub Issues
-- Check existing documentation
-- Review similar merged PRs
+- Ouvrez une discussion dans GitHub Issues
+- Consultez la documentation existante
+- Examinez les PRs similaires fusionnées
 
-## 📜 License
+## 📜 Licence
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+En contribuant, vous acceptez que vos contributions soient sous licence MIT.
 
 ---
 
-Thank you for helping make IKOMA MCP better! 🙏
+Merci d'aider à améliorer IKOMA MCP ! 🙏
