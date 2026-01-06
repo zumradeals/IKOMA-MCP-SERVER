@@ -71,8 +71,8 @@ IKOMA MCP est un serveur MCP sécurisé et audité qui permet aux assistants IA 
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/zumradeals/ikoma-mcpp.git
-cd ikoma-mcpp
+git clone https://github.com/zumradeals/IKOMA-MCP-SERVER.git ikoma-mcp-server
+cd ikoma-mcp-server
 
 # Copier les fichiers vers /opt/ikoma
 sudo mkdir -p /opt/ikoma
@@ -107,7 +107,7 @@ Configurez votre client MCP pour utiliser IKOMA :
       "args": [
         "compose",
         "-f",
-        "/opt/ikoma/docker-compose.yml",
+        "/opt/ikoma/docker-compose.yml,,
         "run",
         "--rm",
         "ikoma-mcp",
@@ -295,10 +295,23 @@ HTTP_ENABLED=true
 HTTP_PORT=3000
 
 # PostgreSQL
+POSTGRES_HOST=postgres          # Hôte de la base de données (interne à Docker)
+POSTGRES_PORT=5432            # Port de la base de données
+POSTGRES_DB=ikoma             # Nom de la base de données principale
+POSTGRES_USER=ikoma           # Utilisateur de la base de données
 POSTGRES_PASSWORD=votre_mot_de_passe_securise
 
 # Clé API (hash SHA256)
 API_KEY_HASH=votre_hash_ici
+
+# Chemins et Logs
+APPS_ROOT=/srv/apps           # Racine des répertoires d'applications
+AUDIT_LOG=/var/log/ikoma/audit.jsonl # Chemin du fichier de log d'audit
+DOCKER_SOCKET=/var/run/docker.sock # Chemin du socket Docker
+
+# Limites de Taux (HTTP)
+RATE_LIMIT_WINDOW_MS=60000    # Fenêtre de temps en ms (60s)
+RATE_LIMIT_MAX_REQUESTS=100   # Nombre max de requêtes par fenêtre
 
 # Rôle par défaut pour MCP stdio
 IKOMA_ROLE=operator
@@ -327,7 +340,7 @@ Licence MIT - voir le fichier [LICENSE](LICENSE).
 
 ## 🆘 Support
 
-- Issues GitHub : https://github.com/zumradeals/ikoma-mcpp/issues
+- Issues GitHub : https://github.com/zumradeals/IKOMA-MCP-SERVER/issues
 - Documentation : Voir les fichiers de documentation du projet (README-runbook.md, DEMO-SESSION.md)
 
 ## 🙏 Remerciements
